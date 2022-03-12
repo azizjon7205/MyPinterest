@@ -1,12 +1,15 @@
 package com.example.mypinterest.fragments
 
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -32,11 +35,12 @@ class DetailsFragment(var items: ArrayList<Photo>, var position: Int) : Fragment
     private lateinit var recyclerView: RecyclerView
     private lateinit var detailsAdapter: DetailsAdapter
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN or WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
     }
 
     override fun onCreateView(
@@ -58,7 +62,6 @@ class DetailsFragment(var items: ArrayList<Photo>, var position: Int) : Fragment
         snapHelper.attachToRecyclerView(recyclerView)
         refreshAdapter(items)
         recyclerView.scrollToPosition(position)
-
 
         Logger.d("ClickedPosition", "Fragment -> $position")
     }

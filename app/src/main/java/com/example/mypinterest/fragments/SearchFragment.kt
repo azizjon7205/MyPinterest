@@ -17,8 +17,10 @@ import com.example.mypinterest.R
 import com.example.mypinterest.activity.MainActivity
 import com.example.mypinterest.adapter.PhotosAdapter
 import com.example.mypinterest.adapter.SearchTitleAdapter
-import com.example.mypinterest.model.*
 import com.example.mypinterest.model.Collection
+import com.example.mypinterest.model.MyCollection
+import com.example.mypinterest.model.Search
+import com.example.mypinterest.model.Topic
 import com.example.mypinterest.network.RetrofitHttp
 import com.example.mypinterest.utils.Logger
 import retrofit2.Call
@@ -47,11 +49,12 @@ class SearchFragment private constructor() : Fragment() {
     private lateinit var edt_search: EditText
     private lateinit var ll_search_titles: LinearLayout
 
+    var page = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         adapter = PhotosAdapter(requireContext())
-
     }
 
     override fun onCreateView(
@@ -68,8 +71,17 @@ class SearchFragment private constructor() : Fragment() {
 
     private fun initViews(view: View) {
         recyclerSearch = view.findViewById(R.id.rv_search)
-        recyclerSearch.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerSearch.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerSearch.adapter = adapter
+
+        recyclerSearch.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!recyclerSearch.canScrollVertically(1))
+                    searchPhoto(edt_search.text.toString(), ++page)
+            }
+        })
 
         recyclerTopic = view.findViewById(R.id.rv_search_titles)
         recyclerTopic.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -81,21 +93,23 @@ class SearchFragment private constructor() : Fragment() {
         edt_search.text.clear()
         edt_search.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH && edt_search.text.isNotEmpty()) {
-                searchPhoto(edt_search.text.toString())
+                page = 1
+                searchPhoto(edt_search.text.toString(), page)
+
                 recyclerSearch.visibility = View.VISIBLE
                 ll_search_titles.visibility = View.GONE
             }
             false
         })
 
-        if (adapter.items.isNotEmpty()){
+        if (adapter.items.isNotEmpty()) {
             recyclerSearch.visibility = View.VISIBLE
             ll_search_titles.visibility = View.GONE
         }
     }
 
-    fun onBackPressed(): Boolean{
-        if (ll_search_titles.visibility == View.GONE){
+    fun onBackPressed(): Boolean {
+        if (ll_search_titles.visibility == View.GONE) {
             recyclerSearch.visibility = View.GONE
             ll_search_titles.visibility = View.VISIBLE
             edt_search.text.clear()
@@ -104,13 +118,9 @@ class SearchFragment private constructor() : Fragment() {
         return true
     }
 
-    private fun refreshAdapterSearch(recyclerView: RecyclerView) {
-        recyclerView.adapter = adapter
-    }
-
     private fun refreshAdapterTopics(items: ArrayList<MyCollection>) {
         adapterTitle = SearchTitleAdapter(requireContext(), items) {
-            searchPhoto(it)
+            searchPhoto(it, 1)
             recyclerSearch.visibility = View.VISIBLE
             ll_search_titles.visibility = View.GONE
             edt_search.text.clear()
@@ -138,12 +148,13 @@ class SearchFragment private constructor() : Fragment() {
         refreshAdapterTopics(collects)
     }
 
-    private fun searchPhoto(query: String) {
+    private fun searchPhoto(query: String, page: Int) {
         RetrofitHttp.photosService.searchPhoto(query).enqueue(object : Callback<Search> {
             override fun onResponse(call: Call<Search>, response: Response<Search>) {
+                if (page == 1)
                     adapter.items.clear()
-                    adapter.items.addAll(response.body()!!.results!!)
-                    adapter.notifyDataSetChanged()
+                adapter.items.addAll(response.body()!!.results!!)
+                adapter.notifyDataSetChanged()
 
                 Logger.d("@@@", "Search -> ${response.body()}")
             }
@@ -193,4 +204,6 @@ class SearchFragment private constructor() : Fragment() {
 
         })
     }
+
+
 }

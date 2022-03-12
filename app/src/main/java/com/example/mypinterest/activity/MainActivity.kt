@@ -2,18 +2,21 @@ package com.example.mypinterest.activity
 
 import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.mypinterest.R
 import com.example.mypinterest.fragments.MessageFragment
 import com.example.mypinterest.fragments.PhotosFragment
+import com.example.mypinterest.fragments.ProfileFragment
 import com.example.mypinterest.fragments.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+    private var isLightStatusBar: Boolean = false
     private lateinit var fm_fragments: FrameLayout
     private lateinit var bottom_nav: BottomNavigationView
 
@@ -32,29 +35,30 @@ class MainActivity : AppCompatActivity() {
         initViews()
     }
 
-    private fun initFragments(){
+    private fun initFragments() {
         photosFragment = PhotosFragment.newInstance()!!
         searchFragment = SearchFragment.newInstance()!!
         messageFragment = MessageFragment.newInstance()!!
     }
 
-    private fun initViews(){
+    private fun initViews() {
         fm_fragments = findViewById(R.id.fm_fragments)
 
-        replaceFragment(photosFragment)
+        replaceFragment(ProfileFragment())
         bottom_nav = findViewById(R.id.bottom_navigation)
         bottom_nav.setOnNavigationItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.nav_home -> replaceFragment(photosFragment)
                 R.id.nav_search -> replaceFragment(searchFragment)
                 R.id.nav_message -> replaceFragment(messageFragment)
+                R.id.nav_profile -> replaceFragment(ProfileFragment())
             }
             true
         }
     }
 
 
-     fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
         val backStateName = fragment.javaClass.name
         val manager = supportFragmentManager
         val fragmentPopped = manager.popBackStackImmediate(backStateName, 0)
@@ -68,26 +72,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount == 1)
-            if (supportFragmentManager.fragments.any { it is SearchFragment }){
-                if (searchFragment.onBackPressed())
-                    finish()
-            }else finish()
-        else
+            finish()
+        else if (supportFragmentManager.fragments.any { it is SearchFragment }) {
+            if (searchFragment.onBackPressed())
+                super.onBackPressed()
+        } else
             super.onBackPressed()
     }
 
-    fun showBottomNavigation(){
+    fun showBottomNavigation() {
         bottom_nav.visibility = View.VISIBLE
     }
 
-    fun hideBottomNavigation(){
+    fun hideBottomNavigation() {
         bottom_nav.visibility = View.GONE
     }
 
-    fun setTransparentStatusBar() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.TRANSPARENT
-        }
-    }
 }

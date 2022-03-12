@@ -17,7 +17,10 @@ interface PhotosService {
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("photos")
-    fun listPhotos(@Query("page") page: Int, @Query("per_page") per_page: Int = 20): Call<ArrayList<Photo>>
+    fun listPhotos(
+        @Query("page") page: Int,
+        @Query("per_page") per_page: Int = 20,
+    ): Call<ArrayList<Photo>>
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("photos/{id}/related")
@@ -25,15 +28,25 @@ interface PhotosService {
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("search/photos")
-    fun searchPhoto(@Query("query") query: String, @Query("per_page") per_page: Int = 20): Call<Search>
+    fun searchPhoto(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1,
+        @Query("per_page") per_page: Int = 20,
+    ): Call<Search>
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("topics")
-    fun getTopics(@Query("page") page: Int = 2, @Query("per_page") per_page: Int = 10): Call<ArrayList<Topic>>
+    fun getTopics(
+        @Query("page") page: Int = 2,
+        @Query("per_page") per_page: Int = 10,
+    ): Call<ArrayList<Topic>>
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("collections")
-    fun getCollections(@Query("page") page: Int = 2, @Query("per_page") per_page: Int = 10): Call<ArrayList<Collection>>
+    fun getCollections(
+        @Query("page") page: Int = 2,
+        @Query("per_page") per_page: Int = 10,
+    ): Call<ArrayList<Collection>>
 
 
 }
