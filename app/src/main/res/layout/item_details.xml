@@ -17,8 +17,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:paddingBottom="20dp"
-                android:background="@drawable/edt_shape_rounded"
+                android:background="@drawable/shape_rounded_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -112,13 +111,124 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:text="@string/app_name"
+                    android:textColor="@color/black"
+                    android:layout_marginHorizontal="15dp"
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <FrameLayout
+                    android:paddingVertical="15dp"
+                    android:paddingHorizontal="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_chat_24"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"/>
+
+                    <ImageView
+                        android:layout_gravity="end|center_vertical"
+                        android:src="@drawable/ic_share_24"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"/>
+
+                    <LinearLayout
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_visit_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rounded"
+                            android:backgroundTint="@color/holo_white"
+                            android:padding="20dp"
+                            android:text="View"
+                            android:textColor="@color/black_light"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_save"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rounded"
+                            android:backgroundTint="@color/red"
+                            android:padding="20dp"
+                            android:text="Save"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="3dp"
+                android:padding="15dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rounded_white">
+
+                <TextView
+                    android:text="Comments"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tv_message"
+                    android:text="Love this Pin? Let Humberto Texis know!"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_profile_comment"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_launcher_background"
+                        app:shapeAppearanceOverlay="@style/circle" />
+
+                    <TextView
+                        android:text="Add a comment"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:layout_marginStart="25dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/edt_shape_rounded"
+                android:background="@drawable/shape_rounded_white"
                 android:orientation="vertical">
 
                 <TextView

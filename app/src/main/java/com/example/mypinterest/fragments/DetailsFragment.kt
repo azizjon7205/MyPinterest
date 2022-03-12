@@ -1,10 +1,12 @@
 package com.example.mypinterest.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -30,12 +32,20 @@ class DetailsFragment(var items: ArrayList<Photo>, var position: Int) : Fragment
     private lateinit var recyclerView: RecyclerView
     private lateinit var detailsAdapter: DetailsAdapter
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_details, container, false)
+        requireContext()
         initViews(view)
         (requireContext() as MainActivity).hideBottomNavigation()
         return view
@@ -56,6 +66,12 @@ class DetailsFragment(var items: ArrayList<Photo>, var position: Int) : Fragment
     private fun refreshAdapter(items: ArrayList<Photo>){
         detailsAdapter = DetailsAdapter(requireContext(), items)
         recyclerView.adapter = detailsAdapter
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
 }

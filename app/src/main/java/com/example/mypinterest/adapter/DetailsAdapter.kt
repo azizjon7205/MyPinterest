@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
@@ -39,24 +40,39 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
         val tv_fullName: TextView = view.findViewById(R.id.tv_fullName)
         val tv_followers: TextView = view.findViewById(R.id.tv_followers)
         val tv_follow: TextView = view.findViewById(R.id.tv_follow)
+        val iv_profile_comment: ShapeableImageView = view.findViewById(R.id.iv_profile_comment)
 
         val iv_settings_more: ImageView = view.findViewById(R.id.iv_more_settings)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rv_details_like_more)
         init {
             recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
+            // making low sensitive recyclerview when touching
+//            val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+//            touchSlopField.isAccessible = true
+//            val touchSlop = touchSlopField.get(recyclerView) as Int
+//            touchSlopField.set(recyclerView, touchSlop*4)
         }
+
 
 
         fun bind(position: Int) {
             val photo = items[position]
-//            iv_photo.setBackgroundColor(Color.parseColor("#262626"))
+            val my_photo = "https://images.unsplash.com/profile-fb-1646646795-2b378122f345.jpg?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=64&w=64"
+
             iv_photo.setBackgroundColor(Color.parseColor(photo.color))
             if (photo.urls != null)
             Glide
                 .with(view)
                 .load(photo.urls?.small)
                 .into(iv_photo)
+            Glide
+                .with(view)
+                .load(my_photo)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+                .into(iv_profile_comment)
 
             val user = photo.user!!
             if (user.profile_image != null)
@@ -66,6 +82,15 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
                     .into(iv_profile)
             tv_fullName.text = user.name!!
             //tv_followers.text = user.links.followers
+
+//            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                    super.onScrollStateChanged(recyclerView, newState)
+//                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
+//                    val activePosition = layoutManager.findFirstVisibleItemPosition()
+//                    if (activePosition == RecyclerView.NO_POSITION) return
+//                }
+//            })
 
             getRelatedPhotos(photo.id!!)
 

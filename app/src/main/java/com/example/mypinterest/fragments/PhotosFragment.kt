@@ -2,6 +2,7 @@ package com.example.mypinterest.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,25 +21,40 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PhotosFragment private constructor(): Fragment() {
+class PhotosFragment private constructor() : Fragment() {
 
-    companion object{
+    companion object {
         @SuppressLint("StaticFieldLeak")
         private var fragment: PhotosFragment? = null
 
-        fun newInstance(): PhotosFragment?{
-            if (fragment == null){
+        fun newInstance(): PhotosFragment? {
+            if (fragment == null) {
                 fragment = PhotosFragment()
             }
             return fragment
         }
     }
 
+    private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var recyclerPhotos: RecyclerView
     private lateinit var adapter: PhotosAdapter
     private lateinit var fm_loading: FrameLayout
+    private lateinit var photos: ArrayList<Photo>
 
     private var loatingCount = 1
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            photos = savedInstanceState.getParcelableArray("Photos")!!.asList() as ArrayList<Photo>
+        } else {
+            photos = ArrayList()
+        }
+
+        Logger.d("LifeCircle", "onCreate")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +65,7 @@ class PhotosFragment private constructor(): Fragment() {
         initViews(view)
         (requireContext() as MainActivity).showBottomNavigation()
 
+        Logger.d("List", "${photos.size} -> ${photos}")
         Logger.d("LifeCircle", "onCreateView")
         return view
     }
@@ -56,7 +73,7 @@ class PhotosFragment private constructor(): Fragment() {
     private fun initViews(view: View) {
         fm_loading = view.findViewById(R.id.fm_loading)
         recyclerPhotos = view.findViewById(R.id.rv_photos)
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 //        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         recyclerPhotos.layoutManager = layoutManager
 
@@ -75,6 +92,7 @@ class PhotosFragment private constructor(): Fragment() {
                     getPhotos(++loatingCount)
 
             }
+
         })
     }
 
@@ -92,9 +110,12 @@ class PhotosFragment private constructor(): Fragment() {
                 ) {
 //                    refreshAdapter(response.body()!!)
                     fm_loading.visibility = View.INVISIBLE
-                    if (page == 1) refreshAdapter(response.body()!!)
-                    else {
+                    if (page == 1) {
+                        refreshAdapter(response.body()!!)
+                        photos = response.body()!!
+                    } else {
                         Logger.d("@@@", "LoadMore -> ")
+                        photos.addAll(response.body()!!)
                         adapter.items.addAll(response.body()!!)
                         adapter.notifyDataSetChanged()
                     }
@@ -108,11 +129,6 @@ class PhotosFragment private constructor(): Fragment() {
             })
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Logger.d("LifeCircle", "onCreate")
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Logger.d("LifeCircle", "onViewCreated")
@@ -120,6 +136,9 @@ class PhotosFragment private constructor(): Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null)
+            savedInstanceState.putParcelableArrayList("Photo",
+                photos as java.util.ArrayList<out Parcelable>)
         Logger.d("LifeCircle", "onViewStateRestored")
     }
 
@@ -159,3 +178,4 @@ class PhotosFragment private constructor(): Fragment() {
     }
 
 }
+

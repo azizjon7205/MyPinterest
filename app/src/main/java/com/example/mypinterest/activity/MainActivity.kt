@@ -1,5 +1,6 @@
 package com.example.mypinterest.activity
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        window.decorView.systemUiVisibility= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         initFragments()
         initViews()
@@ -67,7 +70,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 1)
+        if (supportFragmentManager.fragments.any { it is SearchFragment }){
+            if (searchFragment.onBackPressed())
+                finish()
+        }else if (supportFragmentManager.backStackEntryCount == 1)
             finish()
         else
             super.onBackPressed()
@@ -80,7 +86,5 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavigation(){
         bottom_nav.visibility = View.GONE
     }
-
-
 
 }
