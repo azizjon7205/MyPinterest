@@ -17,7 +17,16 @@ import com.example.mypinterest.fragments.DetailsFragment
 import com.example.mypinterest.model.Photo
 import com.example.mypinterest.utils.Logger
 
-class PhotosAdapter(val context: Context, var items: ArrayList<Photo>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PhotosAdapter(val context: Context, ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+     var items: ArrayList<Photo> = ArrayList()
+
+    @JvmName("setItems1")
+    @SuppressLint("NotifyDataSetChanged")
+    fun setItems(items: ArrayList<Photo>){
+        this.items.addAll(items)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_photos, parent, false)
         return PhotoViewHolder(view)
@@ -30,7 +39,7 @@ class PhotosAdapter(val context: Context, var items: ArrayList<Photo>): Recycler
 
     override fun getItemCount() = items.size
 
-    inner class PhotoViewHolder(val view: View): RecyclerView.ViewHolder(view){
+    inner class PhotoViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val iv_photo: ImageView = view.findViewById(R.id.iv_photo)
         val tv_photo_description: TextView = view.findViewById(R.id.tv_photo_description)
         val ll_photo_container: LinearLayout = view.findViewById(R.id.ll_photo_container)
@@ -38,9 +47,7 @@ class PhotosAdapter(val context: Context, var items: ArrayList<Photo>): Recycler
         val iv_settings_more: ImageView = view.findViewById(R.id.iv_photo_more)
 
         @SuppressLint("NotifyDataSetChanged")
-        fun bind(position: Int){
-//            notifyDataSetChanged()
-//            val position = adapterPosition
+        fun bind(position: Int) {
 
             val photo = items[position]
             iv_photo.setBackgroundColor(Color.parseColor(photo.color))

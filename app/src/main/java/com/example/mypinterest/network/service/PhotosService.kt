@@ -25,12 +25,11 @@ interface PhotosService {
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("search/photos")
-    fun searchPhoto(@Query("query") query: String): Call<Search>
+    fun searchPhoto(@Query("query") query: String, @Query("per_page") per_page: Int = 20): Call<Search>
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("topics")
     fun getTopics(@Query("page") page: Int = 2, @Query("per_page") per_page: Int = 10): Call<ArrayList<Topic>>
-
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("collections")

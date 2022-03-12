@@ -81,23 +81,14 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
                     .error(R.drawable.ic_launcher_background)
                     .into(iv_profile)
             tv_fullName.text = user.name!!
-            //tv_followers.text = user.links.followers
-
-//            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                    super.onScrollStateChanged(recyclerView, newState)
-//                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
-//                    val activePosition = layoutManager.findFirstVisibleItemPosition()
-//                    if (activePosition == RecyclerView.NO_POSITION) return
-//                }
-//            })
 
             getRelatedPhotos(photo.id!!)
 
         }
 
         fun refreshAdapter(items: ArrayList<Photo>){
-            val adapter = PhotosAdapter(context, items)
+            val adapter = PhotosAdapter(context)
+            adapter.items.addAll(items)
             recyclerView.adapter = adapter
         }
 

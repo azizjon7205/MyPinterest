@@ -35,25 +35,18 @@ class PhotosFragment private constructor() : Fragment() {
         }
     }
 
-    private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var recyclerPhotos: RecyclerView
     private lateinit var adapter: PhotosAdapter
     private lateinit var fm_loading: FrameLayout
-    private lateinit var photos: ArrayList<Photo>
 
-    private var loatingCount = 1
-
+    private var loadingCounter = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState != null) {
-            photos = savedInstanceState.getParcelableArray("Photos")!!.asList() as ArrayList<Photo>
-        } else {
-            photos = ArrayList()
-        }
+        adapter = PhotosAdapter(requireContext())
+        getPhotos(loadingCounter)
 
-        Logger.d("LifeCircle", "onCreate")
     }
 
     override fun onCreateView(
@@ -65,40 +58,25 @@ class PhotosFragment private constructor() : Fragment() {
         initViews(view)
         (requireContext() as MainActivity).showBottomNavigation()
 
-        Logger.d("List", "${photos.size} -> ${photos}")
-        Logger.d("LifeCircle", "onCreateView")
         return view
     }
 
     private fun initViews(view: View) {
         fm_loading = view.findViewById(R.id.fm_loading)
         recyclerPhotos = view.findViewById(R.id.rv_photos)
-        layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-//        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
-        recyclerPhotos.layoutManager = layoutManager
-
-        getPhotos(1)
+        recyclerPhotos.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerPhotos.adapter = adapter
 
         recyclerPhotos.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val layoutManager =
-                    StaggeredGridLayoutManager::class.java.cast(recyclerPhotos.layoutManager)
-                val totalItemCount = layoutManager!!.itemCount
-                var lastVisible = intArrayOf(0, 0)
-                lastVisible = layoutManager.findLastVisibleItemPositions(lastVisible)
-                val spanCount = layoutManager.spanCount
-                Logger.d("@@@", "PhotosList -> ${lastVisible[0]} $spanCount")
-                if (lastVisible[0] == totalItemCount - 2 || lastVisible[1] == totalItemCount - 1)
-                    getPhotos(++loatingCount)
-
+                if (!recyclerPhotos.canScrollVertically(1))
+                    getPhotos(++loadingCounter)
             }
 
         })
-    }
-
-    private fun refreshAdapter(items: ArrayList<Photo>) {
-        adapter = PhotosAdapter(requireContext(), items)
-        recyclerPhotos.adapter = adapter
+        if(adapter.items.isNotEmpty()){
+            fm_loading.visibility = View.INVISIBLE
+        }
     }
 
     private fun getPhotos(page: Int) {
@@ -108,17 +86,9 @@ class PhotosFragment private constructor() : Fragment() {
                     call: Call<ArrayList<Photo>>,
                     response: Response<ArrayList<Photo>>,
                 ) {
-//                    refreshAdapter(response.body()!!)
                     fm_loading.visibility = View.INVISIBLE
-                    if (page == 1) {
-                        refreshAdapter(response.body()!!)
-                        photos = response.body()!!
-                    } else {
-                        Logger.d("@@@", "LoadMore -> ")
-                        photos.addAll(response.body()!!)
-                        adapter.items.addAll(response.body()!!)
-                        adapter.notifyDataSetChanged()
-                    }
+                    adapter.setItems(response.body()!!)
+
                     Logger.d("@@@", "PhotosList -> ${response.body()}")
                 }
 
@@ -127,54 +97,6 @@ class PhotosFragment private constructor() : Fragment() {
                 }
 
             })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Logger.d("LifeCircle", "onViewCreated")
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if (savedInstanceState != null)
-            savedInstanceState.putParcelableArrayList("Photo",
-                photos as java.util.ArrayList<out Parcelable>)
-        Logger.d("LifeCircle", "onViewStateRestored")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Logger.d("LifeCircle", "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Logger.d("LifeCircle", "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Logger.d("LifeCircle", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Logger.d("LifeCircle", "onStop")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Logger.d("LifeCircle", "onSaveInstanceState")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Logger.d("LifeCircle", "onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Logger.d("LifeCircle", "onDestroy")
     }
 
 }

@@ -1,15 +1,13 @@
 package com.example.mypinterest.activity
 
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import com.example.mypinterest.R
-import com.example.mypinterest.adapter.ViewPagerAdapter
 import com.example.mypinterest.fragments.MessageFragment
 import com.example.mypinterest.fragments.PhotosFragment
 import com.example.mypinterest.fragments.SearchFragment
@@ -17,7 +15,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var fm_fragments: FrameLayout
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
     private lateinit var bottom_nav: BottomNavigationView
 
     // fragments
@@ -70,11 +67,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.fragments.any { it is SearchFragment }){
-            if (searchFragment.onBackPressed())
-                finish()
-        }else if (supportFragmentManager.backStackEntryCount == 1)
-            finish()
+        if (supportFragmentManager.backStackEntryCount == 1)
+            if (supportFragmentManager.fragments.any { it is SearchFragment }){
+                if (searchFragment.onBackPressed())
+                    finish()
+            }else finish()
         else
             super.onBackPressed()
     }
@@ -87,4 +84,10 @@ class MainActivity : AppCompatActivity() {
         bottom_nav.visibility = View.GONE
     }
 
+    fun setTransparentStatusBar() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = Color.TRANSPARENT
+        }
+    }
 }

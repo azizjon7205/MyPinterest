@@ -42,10 +42,17 @@ class SearchFragment private constructor() : Fragment() {
 
     private lateinit var recyclerSearch: RecyclerView
     private lateinit var recyclerTopic: RecyclerView
-    private var adapter: PhotosAdapter? = null
+    private lateinit var adapter: PhotosAdapter
     private lateinit var adapterTitle: SearchTitleAdapter
     private lateinit var edt_search: EditText
     private lateinit var ll_search_titles: LinearLayout
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        adapter = PhotosAdapter(requireContext())
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,13 +68,13 @@ class SearchFragment private constructor() : Fragment() {
 
     private fun initViews(view: View) {
         recyclerSearch = view.findViewById(R.id.rv_search)
-        recyclerSearch.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerSearch.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerSearch.adapter = adapter
 
         recyclerTopic = view.findViewById(R.id.rv_search_titles)
         recyclerTopic.layoutManager = GridLayoutManager(requireContext(), 2)
-//        getCollections()
 
+//        getCollections()
         getMyCollects()
 
         ll_search_titles = view.findViewById(R.id.ll_search_titles)
@@ -92,9 +99,8 @@ class SearchFragment private constructor() : Fragment() {
         return true
     }
 
-    private fun refreshAdapterSearch(items: ArrayList<Photo>) {
-        adapter = PhotosAdapter(requireContext(), items)
-        recyclerSearch.adapter = adapter
+    private fun refreshAdapterSearch(recyclerView: RecyclerView) {
+        recyclerView.adapter = adapter
     }
 
     private fun refreshAdapterTopics(items: ArrayList<MyCollection>) {
@@ -130,13 +136,11 @@ class SearchFragment private constructor() : Fragment() {
     private fun searchPhoto(query: String) {
         RetrofitHttp.photosService.searchPhoto(query).enqueue(object : Callback<Search> {
             override fun onResponse(call: Call<Search>, response: Response<Search>) {
-                if (adapter == null)
-                    refreshAdapterSearch(response.body()!!.results as ArrayList<Photo>)
-                else {
-                    adapter!!.items.clear()
-                    adapter!!.items.addAll(response.body()!!.results as ArrayList<Photo>)
-                    adapter!!.notifyDataSetChanged()
-                }
+
+                    adapter.items.clear()
+                    adapter.items.addAll(response.body()!!.results as ArrayList<Photo>)
+                    adapter.notifyDataSetChanged()
+
                 Logger.d("@@@", "Search -> ${response.body()}")
             }
 
