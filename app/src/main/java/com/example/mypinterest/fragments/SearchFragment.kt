@@ -73,12 +73,12 @@ class SearchFragment private constructor() : Fragment() {
 
         recyclerTopic = view.findViewById(R.id.rv_search_titles)
         recyclerTopic.layoutManager = GridLayoutManager(requireContext(), 2)
-
-//        getCollections()
         getMyCollects()
+//        getCollections()
 
         ll_search_titles = view.findViewById(R.id.ll_search_titles)
         edt_search = view.findViewById(R.id.edt_search)
+        edt_search.text.clear()
         edt_search.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH && edt_search.text.isNotEmpty()) {
                 searchPhoto(edt_search.text.toString())
@@ -87,6 +87,11 @@ class SearchFragment private constructor() : Fragment() {
             }
             false
         })
+
+        if (adapter.items.isNotEmpty()){
+            recyclerSearch.visibility = View.VISIBLE
+            ll_search_titles.visibility = View.GONE
+        }
     }
 
     fun onBackPressed(): Boolean{
@@ -136,9 +141,8 @@ class SearchFragment private constructor() : Fragment() {
     private fun searchPhoto(query: String) {
         RetrofitHttp.photosService.searchPhoto(query).enqueue(object : Callback<Search> {
             override fun onResponse(call: Call<Search>, response: Response<Search>) {
-
                     adapter.items.clear()
-                    adapter.items.addAll(response.body()!!.results as ArrayList<Photo>)
+                    adapter.items.addAll(response.body()!!.results!!)
                     adapter.notifyDataSetChanged()
 
                 Logger.d("@@@", "Search -> ${response.body()}")
