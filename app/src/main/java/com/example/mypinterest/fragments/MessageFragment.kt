@@ -23,7 +23,6 @@ class MessageFragment private constructor(): Fragment() {
         }
     }
 
-
     private lateinit var pagerAdapter: ViewPagerAdapter
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -38,7 +37,6 @@ class MessageFragment private constructor(): Fragment() {
         setupAdapter()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,7 +48,6 @@ class MessageFragment private constructor(): Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initFragments()
         initViews(view)
     }
 
@@ -65,11 +62,9 @@ class MessageFragment private constructor(): Fragment() {
         viewPager.adapter = ViewPagerAdapter(parentFragmentManager)
 
         refreshAdapter()
-//        changeIconVisible(ivParams, viewPager.currentItem)
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
-//                changeIconVisible(ivParams, position)
             }
 
             override fun onPageScrolled(
@@ -84,7 +79,7 @@ class MessageFragment private constructor(): Fragment() {
     }
 
     private fun setupAdapter() {
-        pagerAdapter = ViewPagerAdapter(parentFragmentManager)
+        pagerAdapter = ViewPagerAdapter(requireActivity().supportFragmentManager)
         pagerAdapter.add(updatesFragment, "Updates")
         pagerAdapter.add(contactFragnent, "Messages")
     }
@@ -96,9 +91,7 @@ class MessageFragment private constructor(): Fragment() {
 
     override fun onResume() {
         super.onResume()
-        initFragments()
-        setupAdapter()
+//        setupAdapter()
         refreshAdapter()
     }
-
 }

@@ -3,8 +3,9 @@ package com.example.mypinterest.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 
-class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
+class ViewPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
     private val fragments = ArrayList<Fragment>()
     private val fragmentTitles = ArrayList<String>()
 
