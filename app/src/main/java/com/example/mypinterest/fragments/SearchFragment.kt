@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.mypinterest.R
 import com.example.mypinterest.activity.MainActivity
 import com.example.mypinterest.adapter.PhotosAdapter
-import com.example.mypinterest.adapter.SearchTitleAdapter
+import com.example.mypinterest.adapter.SearchPopularAdapter
 import com.example.mypinterest.model.Collection
 import com.example.mypinterest.model.MyCollection
 import com.example.mypinterest.model.Search
@@ -45,7 +45,7 @@ class SearchFragment private constructor() : Fragment() {
     private lateinit var recyclerSearch: RecyclerView
     private lateinit var recyclerTopic: RecyclerView
     private lateinit var adapter: PhotosAdapter
-    private lateinit var adapterTitle: SearchTitleAdapter
+    private lateinit var adapterPopular: SearchPopularAdapter
     private lateinit var edt_search: EditText
     private lateinit var ll_search_titles: LinearLayout
 
@@ -65,6 +65,7 @@ class SearchFragment private constructor() : Fragment() {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
         initViews(view)
 
+//        getCollections()
         (requireContext() as MainActivity).showBottomNavigation()
         return view
     }
@@ -119,14 +120,14 @@ class SearchFragment private constructor() : Fragment() {
     }
 
     private fun refreshAdapterTopics(items: ArrayList<MyCollection>) {
-        adapterTitle = SearchTitleAdapter(requireContext(), items) {
+        adapterPopular = SearchPopularAdapter(requireContext(), items) {
             searchPhoto(it, 1)
             recyclerSearch.visibility = View.VISIBLE
             ll_search_titles.visibility = View.GONE
             edt_search.text.clear()
             edt_search.text.insert(0, it)
         }
-        recyclerTopic.adapter = adapterTitle
+        recyclerTopic.adapter = adapterPopular
     }
 
     private fun getMyCollects() {

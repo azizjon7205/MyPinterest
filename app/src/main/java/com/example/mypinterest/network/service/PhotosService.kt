@@ -16,6 +16,10 @@ interface PhotosService {
     }
 
     @Headers("Authorization: Client-ID $ACCESS_KEY")
+    @GET("users/{username}")
+    fun getUser(@Path("username") username: String = "maestro7205"): Call<Profile>
+
+    @Headers("Authorization: Client-ID $ACCESS_KEY")
     @GET("photos")
     fun listPhotos(
         @Query("page") page: Int,

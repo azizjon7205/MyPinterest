@@ -16,7 +16,7 @@ import com.example.mypinterest.model.MyCollection
 import com.example.mypinterest.model.Photo
 import com.example.mypinterest.model.Topic
 
-class SearchTitleAdapter(val context: Context, var items: ArrayList<MyCollection>, val search: (String) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchPopularAdapter(val context: Context, var items: ArrayList<MyCollection>, val search: (String) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_title_search, parent, false)
         return PhotoViewHolder(view)

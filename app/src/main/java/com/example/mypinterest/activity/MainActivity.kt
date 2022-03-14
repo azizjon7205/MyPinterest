@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var photosFragment: PhotosFragment
     private lateinit var searchFragment: SearchFragment
     private lateinit var messageFragment: MessageFragment
+    private lateinit var profileFragment: ProfileFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,19 +40,20 @@ class MainActivity : AppCompatActivity() {
         photosFragment = PhotosFragment.newInstance()!!
         searchFragment = SearchFragment.newInstance()!!
         messageFragment = MessageFragment.newInstance()!!
+        profileFragment = ProfileFragment.newInstance()!!
     }
 
     private fun initViews() {
         fm_fragments = findViewById(R.id.fm_fragments)
 
-        replaceFragment(ProfileFragment())
+        replaceFragment(photosFragment)
         bottom_nav = findViewById(R.id.bottom_navigation)
         bottom_nav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_home -> replaceFragment(photosFragment)
                 R.id.nav_search -> replaceFragment(searchFragment)
                 R.id.nav_message -> replaceFragment(messageFragment)
-                R.id.nav_profile -> replaceFragment(ProfileFragment())
+                R.id.nav_profile -> replaceFragment(profileFragment)
             }
             true
         }

@@ -1,9 +1,10 @@
 package com.example.mypinterest.model
 
-import java.io.Serializable
+import androidx.room.Entity
 
 typealias Photos = ArrayList<Photo>
 
+//@Entity(tableName = "photo_table")
 data class Photo(
     val alt_description: Any? = null,
     val blur_hash: String? = null,
@@ -24,21 +25,21 @@ data class Photo(
     val urls: Urls? = null,
     val user: User? = null,
     val width: Int? = null,
-): Serializable
+)
 
 data class PhotoLinks(
     val download: String? = null,
     val download_location: String? = null,
     val html: String? = null,
     val self: String? = null
-): Serializable
+)
 
 data class Sponsorship(
     val impressionUrls: List<String>?,
     val tagline: String?,
     val taglineURL: String?,
     val sponsor: User?,
-): Serializable
+)
 
 data class User(
     val accepted_tos: Boolean? = null,
@@ -60,7 +61,7 @@ data class User(
     val twitter_username: Any? = null,
     val updated_at: String? = null,
     val username: String? = null
-): Serializable
+)
 
 data class UserLinks(
     val self: String?,
@@ -70,26 +71,26 @@ data class UserLinks(
     val portfolio: String?,
     val following: String?,
     val followers: String?,
-): Serializable
+)
 
 data class ProfileImage(
     val small: String?,
     val medium: String?,
     val large: String?,
-): Serializable
+)
 
 data class Social(
-    val instagramUsername: String? = null,
-    val portfolioURL: String? = null,
-    val twitterUsername: String? = null,
-    val paypalEmail: Any? = null,
-): Serializable
+    val instagram_username: String? = null,
+    val portfolio_url: String? = null,
+    val twitter_username: String? = null,
+    val paypal_email: Any? = null,
+)
 
 
 data class ArtsCulture(
     val status: String?,
-    val approvedOn: String?,
-): Serializable
+    val approved_on: String?,
+)
 
 data class Urls(
     val raw: String?,
@@ -98,4 +99,4 @@ data class Urls(
     val small: String?,
     val thumb: String?,
     val smallS3: String?,
-): Serializable
+)

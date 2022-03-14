@@ -63,14 +63,14 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_search_titles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
                 tools:itemCount="6"
-                tools:listitem="@layout/item_title_search"
-                android:id="@+id/rv_search_titles"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                tools:listitem="@layout/item_title_search" />
         </LinearLayout>
 
     </FrameLayout>

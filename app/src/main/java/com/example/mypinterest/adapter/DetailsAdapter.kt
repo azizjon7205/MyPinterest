@@ -2,16 +2,20 @@ package com.example.mypinterest.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.mypinterest.R
+import com.example.mypinterest.database.MyPhoto
+import com.example.mypinterest.managers.RoomManager
 import com.example.mypinterest.model.Photo
 import com.example.mypinterest.model.RelatedPhotos
 import com.example.mypinterest.network.RetrofitHttp
@@ -43,6 +47,8 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
         val iv_profile_comment: ShapeableImageView = view.findViewById(R.id.iv_profile_comment)
 
         val iv_settings_more: ImageView = view.findViewById(R.id.iv_more_settings)
+        val tv_save: TextView = view.findViewById(R.id.tv_save)
+        val tv_view: TextView = view.findViewById(R.id.tv_visit_view)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rv_details_like_more)
         init {
@@ -83,6 +89,20 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
             tv_fullName.text = user.name!!
 
             getRelatedPhotos(photo.id!!)
+
+            tv_save.setOnClickListener {
+                val myPhoto = MyPhoto(photo.id!!,
+                    photo.color,
+                    photo.description,
+                    photo.urls!!.small,
+                    photo.likes)
+                RoomManager.instance!!.photoDao().savePhoto(myPhoto)
+                tv_save.text = "Saved"
+
+                val toast = Toast.makeText(context, "\tImage Saved to Profile\t", Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.TOP, 0, 0)
+                toast.show()
+            }
 
         }
 
