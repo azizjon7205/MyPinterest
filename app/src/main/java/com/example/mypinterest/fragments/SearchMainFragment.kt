@@ -1,6 +1,5 @@
 package com.example.mypinterest.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,19 +27,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class SearchFragment private constructor() : Fragment() {
+class SearchMainFragment : Fragment() {
 
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        private var fragment: SearchFragment? = null
-
-        fun newInstance(): SearchFragment? {
-            if (fragment == null) {
-                fragment = SearchFragment()
-            }
-            return fragment
-        }
-    }
 
     private lateinit var recyclerSearch: RecyclerView
     private lateinit var recyclerTopic: RecyclerView
@@ -54,7 +42,7 @@ class SearchFragment private constructor() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = PhotosAdapter(requireContext())
+        adapter = PhotosAdapter(requireContext(), this)
     }
 
     override fun onCreateView(
@@ -62,11 +50,11 @@ class SearchFragment private constructor() : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_search, container, false)
+        val view = inflater.inflate(R.layout.fragment_search_main, container, false)
         initViews(view)
 
 //        getCollections()
-        (requireContext() as MainActivity).showBottomNavigation()
+//        (requireContext() as MainActivity).showBottomNavigation()
         return view
     }
 
@@ -206,5 +194,10 @@ class SearchFragment private constructor() : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireContext() as MainActivity).showBottomNavigation()
+        (requireContext() as MainActivity).setLightStatusBar()
+    }
 
 }

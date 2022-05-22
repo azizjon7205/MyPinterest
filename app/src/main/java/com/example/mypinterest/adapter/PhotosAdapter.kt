@@ -1,7 +1,6 @@
 package com.example.mypinterest.adapter
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -10,21 +9,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mypinterest.R
-import com.example.mypinterest.activity.MainActivity
-import com.example.mypinterest.fragments.DetailsFragment
 import com.example.mypinterest.model.Photo
 import com.example.mypinterest.utils.Dialogs
+import com.example.mypinterest.utils.Extensions
 import com.example.mypinterest.utils.Logger
 
-class PhotosAdapter(val context: Context, ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-     var items: ArrayList<Photo> = ArrayList()
+class PhotosAdapter(val context: Context, val fragment: Fragment) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var items: ArrayList<Photo> = ArrayList()
 
     @JvmName("setItems1")
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(items: ArrayList<Photo>){
+    fun setItems(items: ArrayList<Photo>) {
         this.items.addAll(items)
         notifyDataSetChanged()
     }
@@ -62,7 +64,10 @@ class PhotosAdapter(val context: Context, ) : RecyclerView.Adapter<RecyclerView.
 
             iv_photo.setOnClickListener {
                 Logger.d("ClickedPosition", "$position")
-                (context as MainActivity).replaceFragment(DetailsFragment(items, position))
+                fragment.findNavController()
+                    .navigate(R.id.detailsFragment,
+                        bundleOf("photos" to Extensions.parseToString(items),
+                            "position" to position))
             }
 
             iv_settings_more.setOnClickListener {

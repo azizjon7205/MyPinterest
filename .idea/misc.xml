@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android Development/Pinterest/app/src/main/res/layout/activity_main.xml" value="0.1675213675213675" />
+        <entry key="..\:/Android Development/Pinterest/app/src/main/res/layout/fragment_message.xml" value="0.14572649572649574" />
+        <entry key="..\:/Android Development/Pinterest/app/src/main/res/layout/fragment_photos.xml" value="0.10213675213675213" />
+        <entry key="..\:/Android Development/Pinterest/app/src/main/res/menu/bottom_navigation.xml" value="0.1675213675213675" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable-anydpi/ic_more_horiz.xml" value="0.18076923076923077" />
+        <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable-anydpi/ic_sort_tune.xml" value="0.18076923076923077" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable-hdpi/shape_rounded.xml" value="0.11581196581196582" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable-v24/edt_shape_rounded.xml" value="0.2169230769230769" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable-v24/shape_rounded_black.xml" value="0.18076923076923077" />
@@ -11,7 +16,7 @@
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable/shape_profile.xml" value="0.16025641025641027" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable/shape_rounded_black.xml" value="0.18076923076923077" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/drawable/shape_rounded_white.xml" value="0.2203125" />
-        <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.1675213675213675" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/layout/fragment_contact.xml" value="0.1675213675213675" />
         <entry key="..\:/PDP/Android/Android/Modul_6/MyPinterest/app/src/main/res/layout/fragment_details.xml" value="0.1675213675213675" />

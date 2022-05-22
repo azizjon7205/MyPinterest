@@ -2,6 +2,7 @@ package com.example.mypinterest.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.mypinterest.R
-import com.example.mypinterest.adapter.MyPhotosAdapter
-import com.example.mypinterest.database.MyPhoto
+import com.example.mypinterest.activity.MainActivity
+import com.example.mypinterest.adapter.PhotosAdapter
 import com.example.mypinterest.managers.RoomManager
+import com.example.mypinterest.model.Photo
+import com.example.mypinterest.model.Pin
 import com.example.mypinterest.model.Profile
 import com.example.mypinterest.network.RetrofitHttp
 import com.example.mypinterest.utils.Logger
@@ -31,17 +34,6 @@ import java.lang.Math.abs
 
 class ProfileFragment : Fragment() {
 
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        private var fragment: ProfileFragment? = null
-
-        fun newInstance(): ProfileFragment? {
-            if (fragment == null) {
-                fragment = ProfileFragment()
-            }
-            return fragment
-        }
-    }
 
     var receivedResponseAtMillis: Long = 0
     var sentRequestAtMillis: Long = 0
@@ -53,7 +45,7 @@ class ProfileFragment : Fragment() {
     private lateinit var ll_inToolbar: LinearLayout
     private lateinit var appBarLayout: AppBarLayout
     private lateinit var rv_savedPhotos: RecyclerView
-    private lateinit var myPhotosAdapter: MyPhotosAdapter
+    private lateinit var photosAdapter: PhotosAdapter
 
     // profile data
     private lateinit var iv_profile: ShapeableImageView
@@ -124,18 +116,25 @@ class ProfileFragment : Fragment() {
 
         rv_savedPhotos = view.findViewById(R.id.rv_savedPhotos)
         rv_savedPhotos.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        refreshAdapter(RoomManager.instance!!.photoDao().getPhotos() as ArrayList<MyPhoto>)
+
+        refreshAdapter(RoomManager.instance!!.pinDao().getPhotos() as ArrayList<Pin>)
     }
 
-    private fun refreshAdapter(items: ArrayList<MyPhoto>){
-        myPhotosAdapter = MyPhotosAdapter(requireContext())
-        myPhotosAdapter.items.clear()
-        myPhotosAdapter.items.addAll(items)
-        rv_savedPhotos.adapter = myPhotosAdapter
+    private fun refreshAdapter(items: ArrayList<Pin>){
+
+        val photos = ArrayList<Photo>()
+        for (item in items){
+            photos.add(item.photo)
+        }
+        photosAdapter = PhotosAdapter(requireContext(), this)
+        photosAdapter.items.clear()
+        photosAdapter.items.addAll(photos)
+        rv_savedPhotos.adapter = photosAdapter
     }
 
     private fun getMyProfile(){
         RetrofitHttp.photosService.getUser().enqueue(object: Callback<Profile>{
+            @SuppressLint("ResourceType", "SetTextI18n")
             override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
                 receivedResponseAtMillis = response.raw().receivedResponseAtMillis()
                 sentRequestAtMillis = response.raw().sentRequestAtMillis()
@@ -145,10 +144,10 @@ class ProfileFragment : Fragment() {
                 Logger.d("MyProfile", "${receivedResponseAtMillis - sentRequestAtMillis}")
 
                 Glide.with(requireContext()).load(myProfile!!.profile_image!!.medium)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(Color.DKGRAY)
                     .into(iv_profile)
                 Glide.with(requireContext()).load(myProfile!!.profile_image!!.medium)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(Color.DKGRAY)
                     .into(iv_profile_inToolbar)
                 tv_fullname.text = myProfile!!.name
                 tv_fullname_inToolbar.text = myProfile!!.name
@@ -162,6 +161,12 @@ class ProfileFragment : Fragment() {
             }
 
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireContext() as MainActivity).showBottomNavigation()
+        (requireContext() as MainActivity).setLightStatusBar()
     }
 
 }

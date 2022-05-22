@@ -10,18 +10,8 @@ import com.example.mypinterest.R
 import com.example.mypinterest.adapter.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 
-class MessageFragment private constructor(): Fragment() {
+class MessageFragment : Fragment() {
 
-    companion object{
-        private var fragment: MessageFragment? = null
-
-        fun newInstance(): MessageFragment?{
-            if (fragment == null){
-                fragment = MessageFragment()
-            }
-            return fragment
-        }
-    }
 
     private lateinit var pagerAdapter: ViewPagerAdapter
     private lateinit var viewPager: ViewPager
@@ -79,7 +69,7 @@ class MessageFragment private constructor(): Fragment() {
     }
 
     private fun setupAdapter() {
-        pagerAdapter = ViewPagerAdapter(requireActivity().supportFragmentManager)
+        pagerAdapter = ViewPagerAdapter(parentFragmentManager)
         pagerAdapter.add(updatesFragment, "Updates")
         pagerAdapter.add(contactFragnent, "Messages")
     }
@@ -91,7 +81,7 @@ class MessageFragment private constructor(): Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        setupAdapter()
+        setupAdapter()
         refreshAdapter()
     }
 }

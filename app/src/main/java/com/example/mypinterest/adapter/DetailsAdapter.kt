@@ -1,5 +1,6 @@
 package com.example.mypinterest.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
@@ -9,14 +10,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.mypinterest.R
-import com.example.mypinterest.database.MyPhoto
+import com.example.mypinterest.fragments.PhotosFragment
 import com.example.mypinterest.managers.RoomManager
 import com.example.mypinterest.model.Photo
+import com.example.mypinterest.model.Pin
 import com.example.mypinterest.model.RelatedPhotos
 import com.example.mypinterest.network.RetrofitHttp
 import com.google.android.material.imageview.ShapeableImageView
@@ -24,7 +27,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
+class DetailsAdapter(val context: Context, val fragment: Fragment, var items: ArrayList<Photo>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_details, parent, false)
@@ -63,6 +66,7 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
 
 
 
+        @SuppressLint("ResourceType", "UseCompatLoadingForColorStateLists")
         fun bind(position: Int) {
             val photo = items[position]
             val my_photo = "https://images.unsplash.com/profile-fb-1646646795-2b378122f345.jpg?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=64&w=64"
@@ -76,28 +80,24 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
             Glide
                 .with(view)
                 .load(my_photo)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+                .placeholder(Color.DKGRAY)
+                .error(Color.DKGRAY)
                 .into(iv_profile_comment)
 
             val user = photo.user!!
             if (user.profile_image != null)
                 Glide.with(view)
                     .load(user.profile_image.small)
-                    .error(R.drawable.ic_launcher_background)
+                    .error(Color.DKGRAY)
                     .into(iv_profile)
             tv_fullName.text = user.name!!
 
             getRelatedPhotos(photo.id!!)
 
             tv_save.setOnClickListener {
-                val myPhoto = MyPhoto(photo.id!!,
-                    photo.color,
-                    photo.description,
-                    photo.urls!!.small,
-                    photo.likes)
-                RoomManager.instance!!.photoDao().savePhoto(myPhoto)
+                RoomManager.instance!!.pinDao().savePhoto(Pin(0, photo))
                 tv_save.text = "Saved"
+                tv_save.backgroundTintList = context.resources.getColorStateList(R.color.holo_light)
 
                 val toast = Toast.makeText(context, "\tImage Saved to Profile\t", Toast.LENGTH_LONG)
                 toast.setGravity(Gravity.TOP, 0, 0)
@@ -107,7 +107,7 @@ class DetailsAdapter(val context: Context, var items: ArrayList<Photo>) :
         }
 
         fun refreshAdapter(items: ArrayList<Photo>){
-            val adapter = PhotosAdapter(context)
+            val adapter = PhotosAdapter(context, fragment)
             adapter.items.addAll(items)
             recyclerView.adapter = adapter
         }

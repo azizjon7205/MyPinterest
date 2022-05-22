@@ -21,19 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PhotosFragment private constructor() : Fragment() {
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        private var fragment: PhotosFragment? = null
-
-        fun newInstance(): PhotosFragment? {
-            if (fragment == null) {
-                fragment = PhotosFragment()
-            }
-            return fragment
-        }
-    }
+class PhotosFragment : Fragment() {
 
     private lateinit var recyclerPhotos: RecyclerView
     private lateinit var adapter: PhotosAdapter
@@ -44,7 +32,7 @@ class PhotosFragment private constructor() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = PhotosAdapter(requireContext())
+        adapter = PhotosAdapter(requireContext(), this)
         getPhotos(loadingCounter)
 
     }
@@ -56,7 +44,7 @@ class PhotosFragment private constructor() : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_photos, container, false)
         initViews(view)
-        (requireContext() as MainActivity).showBottomNavigation()
+//        (requireContext() as MainActivity).showBottomNavigation()
 
         return view
     }
@@ -72,7 +60,6 @@ class PhotosFragment private constructor() : Fragment() {
                 if (!recyclerPhotos.canScrollVertically(1))
                     getPhotos(++loadingCounter)
             }
-
         })
         if(adapter.items.isNotEmpty()){
             fm_loading.visibility = View.INVISIBLE
@@ -97,6 +84,12 @@ class PhotosFragment private constructor() : Fragment() {
                 }
 
             })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireContext() as MainActivity).showBottomNavigation()
+        (requireContext() as MainActivity).setLightStatusBar()
     }
 
 }

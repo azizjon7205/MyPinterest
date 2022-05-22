@@ -17,7 +17,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@android:color/darker_gray"
             app:shapeAppearanceOverlay="@style/circle" />
 
         <LinearLayout
@@ -60,7 +60,7 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_preview_1"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@android:color/darker_gray"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 android:layout_marginEnd="2dp"
@@ -81,7 +81,7 @@
                     android:layout_height="0dp">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@android:color/darker_gray"
                         android:id="@+id/iv_preview_2"
                         android:scaleType="fitXY"
                         android:adjustViewBounds="true"
@@ -91,7 +91,7 @@
                         android:layout_height="match_parent"/>
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@android:color/darker_gray"
                         android:scaleType="fitXY"
                         android:id="@+id/iv_preview_3"
                         android:adjustViewBounds="true"
@@ -103,7 +103,7 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_preview_4"
-                    android:src="@drawable/ic_launcher_background"
+                    android:src="@android:color/darker_gray"
                     android:scaleType="fitXY"
                     android:adjustViewBounds="true"
                     android:layout_weight="1"

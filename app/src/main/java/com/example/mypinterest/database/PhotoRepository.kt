@@ -4,10 +4,10 @@ import android.app.Application
 import com.example.mypinterest.managers.RoomManager
 
 class PhotoRepository(application: Application) {
-    private var photoDao: PhotoDao? = null
+    private var pinDao: PinDao? = null
 
     init {
-//        RoomManager.init(application)
-        this.photoDao = RoomManager.instance!!.photoDao()
+        RoomManager.init(application)
+        this.pinDao = RoomManager.instance!!.pinDao()
     }
 }

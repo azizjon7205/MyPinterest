@@ -4,12 +4,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.mypinterest.model.Pin
 
 @Dao
-interface PhotoDao {
+interface PinDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun savePhoto(photo: MyPhoto)
+    fun savePhoto(pin: Pin)
 
-    @Query("SELECT * FROM photo_table")
-    fun getPhotos(): List<MyPhoto>
+    @Query("SELECT * FROM PINS_TABLE")
+    fun getPhotos(): List<Pin>
 }

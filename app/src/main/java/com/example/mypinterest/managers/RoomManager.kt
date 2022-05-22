@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.mypinterest.database.MyPhoto
-import com.example.mypinterest.database.PhotoDao
+import androidx.room.TypeConverters
+import com.example.mypinterest.database.PhotoTypeConverter
+import com.example.mypinterest.database.PinDao
+import com.example.mypinterest.model.Pin
 
-@Database(entities = [MyPhoto::class], version = 1)
+@Database(entities = [Pin::class], version = 1, exportSchema = false)
+@TypeConverters(PhotoTypeConverter::class)
 abstract class RoomManager: RoomDatabase() {
 
-    abstract fun photoDao(): PhotoDao
+    abstract fun pinDao(): PinDao
 
     companion object{
         var instance: RoomManager? = null

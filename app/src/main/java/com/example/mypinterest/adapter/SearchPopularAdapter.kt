@@ -1,5 +1,6 @@
 package com.example.mypinterest.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -34,13 +35,14 @@ class SearchPopularAdapter(val context: Context, var items: ArrayList<MyCollecti
         val tv_search_title: TextView = view.findViewById(R.id.tv_search_title)
         val fm_container: FrameLayout = view.findViewById(R.id.fm_search_container)
 
+        @SuppressLint("ResourceType")
         fun bind(position: Int){
             val topic = items[position]
 
             Glide
                 .with(view)
                 .load(topic.url)
-                .error(R.drawable.ic_launcher_background)
+                .error(Color.DKGRAY)
                 .into(iv_photo)
 //
 //            Glide

@@ -7,20 +7,20 @@ data class Topic (
     val slug: String? = null,
     val title: String? = null,
     val description: String? = null,
-    val publishedAt: String? = null,
-    val updatedAt: String? = null,
-    val startsAt: String? = null,
-    val endsAt: String? = null,
-    val onlySubmissionsAfter: Any? = null,
+    val published_at: String? = null,
+    val updated_at: String? = null,
+    val starts_at: String? = null,
+    val ends_at: String? = null,
+    val only_submissions_after: Any? = null,
     val featured: Boolean? = null,
-    val totalPhotos: Long? = null,
-    val currentUserContributions: List<Any?>? = null,
-    val totalCurrentUserSubmissions: Any? = null,
+    val total_photos: Long? = null,
+    val current_user_contributions: List<Any?>? = null,
+    val total_current_user_submissions: Any? = null,
     val links: TopicLinks? = null,
     val status: String? = null,
     val owners: List<User>? = null,
-    val coverPhoto: Photo? = null,
-    val previewPhotos: List<PreviewPhoto>? = null
+    val cover_photo: Photo? = null,
+    val preview_photos: List<PreviewPhoto>? = null
 )
 
 

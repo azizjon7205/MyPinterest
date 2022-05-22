@@ -30,7 +30,7 @@ class PrefsManager private constructor(context: Context) {
     fun getArrayList(key: String): ArrayList<String>?{
         val gson = Gson()
         val json: String? = sharedPreferences!!.getString(key, "")
-        val type: Type = object : TypeToken<java.util.ArrayList<String?>?>() {}.getType()
+        val type: Type = object : TypeToken<java.util.ArrayList<String?>?>() {}.type
         return gson.fromJson(json, type)
     }
 
